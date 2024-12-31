@@ -1,11 +1,16 @@
 import React, { useReducer } from "react";
 
+import { validate } from "../../utils/validators";
 import "./Input.css";
 
 const inputReducer = (state, action) => {
   switch (state.type) {
     case "CHANGE":
-      return { ...state, value: action.value, isValid: true };
+      return {
+        ...state,
+        value: action.value,
+        isValid: validate(action.value, action.validators),
+      };
     default:
       return state;
   }
@@ -18,7 +23,11 @@ const Input = (props) => {
   });
 
   const changeHandler = (event) => {
-    dispatch({ type: "CHANGE", value: event.target.value });
+    dispatch({
+      type: "CHANGE",
+      value: event.target.value,
+      validators: props.validators,
+    });
   };
 
   const element =
